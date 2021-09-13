@@ -1,2 +1,2 @@
 # snake-project-
-i have make a snake game for practice 
+i would like to create snake game for practice 
