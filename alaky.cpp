@@ -40,7 +40,7 @@ public:
     }
   }
 
-private:
+public:
   char map[WIDTH][HEIGHT];
   char wall = WALL;
   char blinker = BLINKER;
@@ -55,7 +55,7 @@ public:
     character = c;
   }
 
-private:
+public:
   int x;
   int y;
   char character;
@@ -67,7 +67,10 @@ public:
   Snake(int x, int y, Map *_map) : head(Map_cell(x, y, HEAD)), tail(Map_cell(x, y, BODY)) {
     map = _map;
   }
-
+  void update_snake() {
+    map->map[tail.x][tail.y] = tail.character;
+    map->map[head.x][head.y] = head.character;
+  }
 private:
   Map_cell head;
   Map_cell tail;
@@ -80,6 +83,11 @@ public:
   Food(int x, int y, Map *_map) : food(Map_cell(x, y, FOOD)) {
     map = _map;
   }
+
+  void update_food() {
+    map->map[food.x][food.y] = food.character;
+  }
+
 private:
   Map_cell food;
   Map *map;
@@ -87,16 +95,20 @@ private:
 
 class Game_contorol {
 public:
-  Game_contorol(int x_snake, int y_snake, int x_food, int y_food) {
-
+  Game_contorol(int x_snake, int y_snake, int x_food, int y_food) : snake(Snake(x_snake, y_snake, &map)), food(Food(x_food, y_food, &map)) {
+    food.update_food();
+    snake.update_snake();
+    map.print_map();
   }
+
+
 private:
-  Map *map;
-  Snake *snake;
-  Food *food;
+  Map map;
+  Snake snake;
+  Food food;
 };
 
 int main(int argc, char const *argv[]) {
-
+  Game_contorol game(10,10,5,5);
   return 0;
 }
