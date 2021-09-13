@@ -18,7 +18,18 @@ using namespace std;
 
 class Map {
 public:
-  Map() {}
+  Map() {
+
+    for (int i = 0; i < WIDTH;  i++) {
+      for (int j = 0; j < HEIGHT; j++) {
+        if (i == 0 || i == WIDTH - 1 || j == 0 || j == HEIGHT - 1){
+          map[i][j] = WALL;
+        } else {
+          map[i][j] = BLINKER;
+        }
+      }
+    }
+  }
 
   void print_map() {
     for (int i = 0; i < HEIGHT; i++) {
@@ -35,6 +46,7 @@ private:
   char blinker = BLINKER;
 };
 
+
 class Map_cell {
 public:
   Map_cell(int _x, int _y, char c) {
@@ -49,16 +61,19 @@ private:
   char character;
 };
 
+
 class Snake {
 public:
   Snake(int x, int y, Map *_map) : head(Map_cell(x, y, HEAD)), tail(Map_cell(x, y, BODY)) {
     map = _map;
   }
+
 private:
   Map_cell head;
   Map_cell tail;
   Map *map;
 };
+
 
 class Food {
 public:
@@ -68,6 +83,17 @@ public:
 private:
   Map_cell food;
   Map *map;
+};
+
+class Game_contorol {
+public:
+  Game_contorol(int x_snake, int y_snake, int x_food, int y_food) {
+
+  }
+private:
+  Map *map;
+  Snake *snake;
+  Food *food;
 };
 
 int main(int argc, char const *argv[]) {
