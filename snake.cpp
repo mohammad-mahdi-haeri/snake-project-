@@ -1,4 +1,6 @@
 #include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -16,6 +18,13 @@ using namespace std;
 #define LEFT 68
 #define RIGHT 67
 
+
+void gotoxy(int x,int y)
+{
+    printf("%c[%d;%df",0x1B,y,x);
+}
+
+
 class Map {
 public:
   Map() {
@@ -32,12 +41,14 @@ public:
   }
 
   void print_map() {
+    gotoxy(0,0);
     for (int i = 0; i < HEIGHT; i++) {
       cout << endl;
       for (int j = 0; j < WIDTH; j++) {
         cout << map[i][j] << ' ';
       }
     }
+    cout << endl;
   }
 
 public:
