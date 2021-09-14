@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -84,6 +85,7 @@ public:
 
   void move_head(int direction) {
     map->map[head.y][head.x] = tail.character;
+    xy_repository.push({head.x, head.y});
     switch (direction) {
       case UP: --head.y;
         break;
@@ -100,10 +102,18 @@ public:
     map->map[head.y][head.x] = head.character;
   }
 
+  void move_tail() {
+    int _x = xy_repository.front().first;
+    int _y = xy_repository.front().second;
+    xy_repository.pop();
+    map->map[_y][_x] = BLINKER;
+  }
+
 private:
   Map_cell head;
   Map_cell tail;
   Map *map;
+  queue<pair<int, int>> xy_repository;
 };
 
 
@@ -126,14 +136,11 @@ class Game_contorol {
 public:
   Game_contorol(int x_snake, int y_snake, int x_food, int y_food) : snake(Snake(x_snake, y_snake, &map)), food(Food(x_food, y_food, &map)) {
     food.update_food();
-    snake.move_head(UP);
-    snake.move_head(UP);
-    snake.move_head(UP);
-    snake.move_head(UP);
     snake.move_head(LEFT);
-    snake.move_head(LEFT);
-    snake.move_head(LEFT);
-    snake.update_snake();
+    snake.move_head(UP);
+    snake.move_tail();
+    snake.move_head(UP);
+    snake.move_tail();
     map.print_map();
   }
 
