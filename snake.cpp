@@ -4,7 +4,7 @@
 
 using namespace std;
 
-#define WIDTH  20
+#define WIDTH  30
 #define HEIGHT 20
 
 #define HEAD 'S'
@@ -19,9 +19,8 @@ using namespace std;
 #define RIGHT 67
 
 
-void gotoxy(int x,int y)
-{
-    printf("%c[%d;%df",0x1B,y,x);
+void gotoxy(int x,int y) {
+  printf("%c[%d;%df",0x1B,y,x);
 }
 
 
@@ -29,9 +28,9 @@ class Map {
 public:
   Map() {
 
-    for (int i = 0; i < WIDTH;  i++) {
-      for (int j = 0; j < HEIGHT; j++) {
-        if (i == 0 || i == WIDTH - 1 || j == 0 || j == HEIGHT - 1){
+    for (int i = 0; i < HEIGHT;  i++) {
+      for (int j = 0; j < WIDTH; j++) {
+        if (i == 0 || i == HEIGHT - 1 || j == 0 || j == WIDTH - 1) {
           map[i][j] = WALL;
         } else {
           map[i][j] = BLINKER;
@@ -52,7 +51,7 @@ public:
   }
 
 public:
-  char map[WIDTH][HEIGHT];
+  char map[HEIGHT][WIDTH];
   char wall = WALL;
   char blinker = BLINKER;
 };
@@ -79,9 +78,28 @@ public:
     map = _map;
   }
   void update_snake() {
-    map->map[tail.x][tail.y] = tail.character;
-    map->map[head.x][head.y] = head.character;
+    map->map[tail.y][tail.x] = tail.character;
+    map->map[head.y][head.x] = head.character;
   }
+
+  void move_head(int direction) {
+    map->map[head.y][head.x] = tail.character;
+    switch (direction) {
+      case UP: --head.y;
+        break;
+      case DOWN: ++head.y;
+        break;
+      case RIGHT: ++head.x;
+        break;
+      case LEFT: --head.x;
+        break;
+      default:
+        return;
+        break;
+    }
+    map->map[head.y][head.x] = head.character;
+  }
+
 private:
   Map_cell head;
   Map_cell tail;
@@ -96,7 +114,7 @@ public:
   }
 
   void update_food() {
-    map->map[food.x][food.y] = food.character;
+    map->map[food.y][food.x] = food.character;
   }
 
 private:
@@ -108,6 +126,13 @@ class Game_contorol {
 public:
   Game_contorol(int x_snake, int y_snake, int x_food, int y_food) : snake(Snake(x_snake, y_snake, &map)), food(Food(x_food, y_food, &map)) {
     food.update_food();
+    snake.move_head(UP);
+    snake.move_head(UP);
+    snake.move_head(UP);
+    snake.move_head(UP);
+    snake.move_head(LEFT);
+    snake.move_head(LEFT);
+    snake.move_head(LEFT);
     snake.update_snake();
     map.print_map();
   }
