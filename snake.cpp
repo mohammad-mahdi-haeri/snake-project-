@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -9,6 +10,8 @@ using namespace std;
 
 #define HEAD 'S'
 #define BODY 'O'
+#define TAIL '+'
+
 #define WALL '0'
 #define BLINKER '.'
 #define FOOD 'F'
@@ -74,16 +77,15 @@ public:
 
 class Snake {
 public:
-  Snake(int x, int y, Map *_map) : head(Map_cell(x, y, HEAD)), tail(Map_cell(x, y, BODY)) {
+  Snake(int x, int y, Map *_map) : head(Map_cell(x, y, HEAD)), tail(Map_cell(x, y + 1, TAIL)) {
     map = _map;
-  }
-  void update_snake() {
     map->map[tail.y][tail.x] = tail.character;
     map->map[head.y][head.x] = head.character;
   }
 
   void move_head(int direction) {
-    map->map[head.y][head.x] = tail.character;
+    map->map[head.y][head.x] = body;
+    xy_repository.push({head.x, head.y});
     switch (direction) {
       case UP: --head.y;
         break;
@@ -100,10 +102,22 @@ public:
     map->map[head.y][head.x] = head.character;
   }
 
+  void move_tail() {
+    int _x = xy_repository.front().first;
+    int _y = xy_repository.front().second;
+    xy_repository.pop();
+    map->map[tail.y][tail.x] = BLINKER;
+    map->map[_y][_x] = tail.character;
+    tail.x = _x;
+    tail.y = _y;
+  }
+
 private:
   Map_cell head;
   Map_cell tail;
+  char body = BODY;
   Map *map;
+  queue<pair<int, int>> xy_repository;
 };
 
 
@@ -111,9 +125,6 @@ class Food {
 public:
   Food(int x, int y, Map *_map) : food(Map_cell(x, y, FOOD)) {
     map = _map;
-  }
-
-  void update_food() {
     map->map[food.y][food.x] = food.character;
   }
 
@@ -125,18 +136,9 @@ private:
 class Game_contorol {
 public:
   Game_contorol(int x_snake, int y_snake, int x_food, int y_food) : snake(Snake(x_snake, y_snake, &map)), food(Food(x_food, y_food, &map)) {
-    food.update_food();
-    snake.move_head(UP);
-    snake.move_head(UP);
-    snake.move_head(UP);
-    snake.move_head(UP);
-    snake.move_head(LEFT);
-    snake.move_head(LEFT);
-    snake.move_head(LEFT);
-    snake.update_snake();
+
     map.print_map();
   }
-
 
 private:
   Map map;
