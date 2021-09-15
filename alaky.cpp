@@ -6,7 +6,7 @@
 
 using namespace std;
 
-#define WIDTH  30
+#define WIDTH 30
 #define HEIGHT 20
 
 #define HEAD 'S'
@@ -126,7 +126,8 @@ class Food {
 public:
   Food(int x, int y, Map *_map) : food(Map_cell(x, y, FOOD)) {
     map = _map;
-    map->map[food.y][food.x] = food.character;
+    // map->map[food.y][food.x] = food.character;
+    random_food();
   }
 
   bool check_random(int x, int y) {
@@ -153,7 +154,7 @@ private:
 class Game_contorol {
 public:
   Game_contorol(int x_snake, int y_snake, int x_food, int y_food) : snake(Snake(x_snake, y_snake, &map)), food(Food(x_food, y_food, &map)) {
-    food.random_food();
+    // food.random_food();
     map.print_map();
   }
 
@@ -167,6 +168,6 @@ int main(int argc, char const *argv[]) {
   /* initialize random seed: */
   srand (time(NULL));
 
-  Game_contorol game(10,10,5,5);
+  Game_contorol game(WIDTH / 2,HEIGHT / 2,5,5);
   return 0;
 }
