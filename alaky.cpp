@@ -137,12 +137,12 @@ public:
   }
 
   void random_food() {
-    int x = rand() % (WIDTH);
-    int y = rand() % (HEIGHT);
-    if(!check_random(x, y)){
+    food.x = rand() % (WIDTH);
+    food.y = rand() % (HEIGHT);
+    if(!check_random(food.x, food.y)){
       random_food();
     }
-    map->map[y][x] = food.character;
+    map->map[food.y][food.x] = food.character;
   }
 private:
   Map_cell food;
