@@ -19,8 +19,8 @@ using namespace std;
 
 #define UP 65
 #define	DOWN 66
-#define LEFT 68
 #define RIGHT 67
+#define LEFT 68
 
 
 void gotoxy(int x,int y) {
@@ -80,14 +80,28 @@ class Snake {
 public:
   Snake(int x, int y, Map *_map) : head(Map_cell(x, y, HEAD)), tail(Map_cell(x, y + 1, TAIL)) {
     map = _map;
+    direction = UP;
     map->map[tail.y][tail.x] = tail.character;
     map->map[head.y][head.x] = head.character;
   }
 
-  void move_head(int direction) {
+  bool check_direction(int move) {
+    if((direction == UP && move == DOWN) || (direction == DOWN && move == UP)) {
+      return false;
+    } else if ((direction == RIGHT && move == LEFT) || (direction == LEFT && move == RIGHT)) {
+      return false;
+    }
+    direction = move;
+    return true;
+  }
+
+  void move_head(int move) {
+    if(!check_direction(move)) {
+      return;
+    }
     map->map[head.y][head.x] = body;
     xy_repository.push({head.x, head.y});
-    switch (direction) {
+    switch (move) {
       case UP: --head.y;
         break;
       case DOWN: ++head.y;
@@ -119,6 +133,7 @@ private:
   char body = BODY;
   Map *map;
   queue<pair<int, int>> xy_repository;
+  int direction;
 };
 
 
