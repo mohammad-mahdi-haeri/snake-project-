@@ -1,7 +1,8 @@
 #include <iostream>
 #include <queue>
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 using namespace std;
 
@@ -147,6 +148,9 @@ private:
 };
 
 int main(int argc, char const *argv[]) {
+  /* initialize random seed: */
+  srand (time(NULL));
+
   Game_contorol game(10,10,5,5);
   return 0;
 }
