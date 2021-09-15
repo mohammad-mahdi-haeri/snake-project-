@@ -96,9 +96,6 @@ public:
   }
 
   void move_head(int move) {
-    if(!check_direction(move)) {
-      return;
-    }
     map->map[head.y][head.x] = body;
     xy_repository.push({head.x, head.y});
     switch (move) {
