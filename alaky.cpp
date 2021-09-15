@@ -129,15 +129,31 @@ public:
     map->map[food.y][food.x] = food.character;
   }
 
+  bool check_random(int x, int y) {
+    if (map->map[y][x] != BLINKER) {
+      return false;
+    }
+    return true;
+  }
+
+  void random_food() {
+    int x = rand() % (WIDTH);
+    int y = rand() % (HEIGHT);
+    if(!check_random(x, y)){
+      random_food();
+    }
+    map->map[y][x] = food.character;
+  }
 private:
   Map_cell food;
   Map *map;
 };
 
+
 class Game_contorol {
 public:
   Game_contorol(int x_snake, int y_snake, int x_food, int y_food) : snake(Snake(x_snake, y_snake, &map)), food(Food(x_food, y_food, &map)) {
-
+    food.random_food();
     map.print_map();
   }
 
